@@ -4,11 +4,3 @@ config.toml
 # Added by cargo
 
 /target
-
-methods.sample
-
-# Added by cargo
-#
-# already existing elements were commented out
-
-#/target
