@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "maid"
+version = "0.1.0"
+description = ""
+authors = ["Nero <nerodono0@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiogram = "^2.25.1"
+pytoml = "^0.1.21"
+openai = "^0.27.0"
+dataclass-factory = "^2.16"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

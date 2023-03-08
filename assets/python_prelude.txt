@@ -1,0 +1,2 @@
+Your master asked you to execute python command, you done this and got the following result:
+{result}

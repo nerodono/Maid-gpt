@@ -1,0 +1,8 @@
+[bot]
+username = "nerosmaid_bot"
+token = "telegram_token"
+prefix = "^(медуза|мейда?|горничная?)[,\\s]*"
+
+[ai]
+token = "openai-token"
+master = "nerodono"

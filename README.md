@@ -1,1 +1,3 @@
-# Maid-gpt
+# Maid
+
+Cringe and perverted maid bot.
