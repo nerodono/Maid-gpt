@@ -3,6 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from dataclass_factory import Factory
 from pytoml import load
+from enum import Enum
+
+class Sex(str, Enum):
+    male = "male"
+    female = "female"
 
 
 @dataclass
@@ -15,7 +20,16 @@ class BotConfig:
 @dataclass
 class AiConfig:
     token: str
-    master: str
+    name: str
+    sex: Sex
+
+    master: MasterConfig
+
+@dataclass
+class MasterConfig:
+    name: str
+    username: str
+    note: str
 
 
 @dataclass

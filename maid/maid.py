@@ -28,7 +28,13 @@ class Maid:
         self.engine = PromptEngine(
             initial_prompts=[
                 Prompt.read_system("format"),
-                Prompt.read_system("base_prompt"),
+                Prompt.read_system("base_prompt", map=lambda x: x.format(
+                    name=config.ai.name,
+                    sex=config.ai.sex,
+                    master_name=config.ai.master.name,
+                    master_tgid=config.ai.master.username,
+                    master_note=config.ai.master.note,
+                )),
                 Prompt.read_system("guest_database"),
             ]
         )
@@ -60,7 +66,7 @@ class Maid:
         )
 
     def infer_rights(self, of: User) -> HouseRights:
-        if of.username == self._config.ai.master:
+        if of.username == self._config.ai.master.username:
             return HouseRights.master
         return HouseRights.guest
 
@@ -73,6 +79,7 @@ class Maid:
         )
 
     def responds_to(self, message: Message) -> Optional[List[Prompt]]:
+        is_direct_messages = message.chat.id == message.from_user.id
         if message.reply_to_message is not None:
             reply = message.reply_to_message
 
@@ -83,10 +90,13 @@ class Maid:
                 ]
 
         prefix_match = self._prefix.match(message.text.lower())
-        if not prefix_match:
+        if not prefix_match and not is_direct_messages:
             return
 
-        span = prefix_match.span()[1]
-        cut = message.text[span:].strip()
+        if prefix_match:
+            span = prefix_match.span()[1]
+            cut = message.text[span:].strip()
+        else:
+            cut = message.text
 
         return [self.create_prompt(message, cut).to_prompt()]
