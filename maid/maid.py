@@ -49,7 +49,7 @@ class Maid:
                 ),
             )
         except RateLimitError as e:
-            await sleep(3)
+            await sleep(5)
             print("Rate limit {}".format(e))
             return await self.feed(prompts)
 
