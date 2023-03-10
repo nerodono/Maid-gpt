@@ -1,13 +1,21 @@
 from __future__ import annotations
 
+from tomli import loads
+from pathlib import Path
 from dataclasses import dataclass
 from dataclass_factory import Factory
-from pytoml import load
 from enum import Enum
 
+
 class Sex(str, Enum):
-    male = "male"
     female = "female"
+    male = "male"
+
+
+@dataclass
+class CharacterConfig:
+    name: str
+    sex: Sex
 
 
 @dataclass
@@ -18,25 +26,29 @@ class BotConfig:
 
 
 @dataclass
-class AiConfig:
-    token: str
-    name: str
-    sex: Sex
-
-    master: MasterConfig
-
-@dataclass
-class MasterConfig:
+class AiMasterConfig:
     name: str
     username: str
-    note: str
+    sex: Sex
+
+
+@dataclass
+class AiConfig:
+    master: AiMasterConfig
+    character: CharacterConfig
+
+    model: str
+    token: str
 
 
 @dataclass
 class Config:
-    bot: BotConfig
     ai: AiConfig
+    bot: BotConfig
 
     @classmethod
-    def load(cls) -> Config:
-        return Factory().load(load(open("config.toml")), cls)
+    def read(cls, path: Path) -> Config:
+        content = path.read_text()
+        parsed = loads(content)
+
+        return Factory().load(parsed, cls)

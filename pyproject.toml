@@ -7,12 +7,19 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-aiogram = "^2.25.1"
-pytoml = "^0.1.21"
-openai = "^0.27.0"
-dataclass-factory = "^2.16"
-psutil = "^5.9.4"
+black = "^23.1.0"
 
+aiogram = "^2.25.1"
+aiohttp = "^3.8.4"
+flake8 = "^6.0.0"
+dataclass-factory = "^2.16"
+tomli = "^2.0.1"
+lxml = "^4.9.2"
+psutil = "^5.9.4"
+mako = "^1.2.4"
+
+[tool.black]
+line-length = 75
 
 [build-system]
 requires = ["poetry-core"]

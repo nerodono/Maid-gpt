@@ -1,15 +1,17 @@
 [bot]
 username = "nerosmaid_bot"
-token = "telegram token"
-prefix = "^(медуза|мейда?|горничная?)[,\\s]*"
+prefix = "(мейда?|медуза?|горничная)[,\\s]*"
+token = "telegram bot token"
 
 [ai]
+model = "gpt-3.5-turbo"
 token = "openai token"
+
+[ai.character]
 name = "Medusa"
 sex = "female"
 
 [ai.master]
-name = "Nero, Неро in Russian, not Нерон,"
+name = "Nero, Неро in Russian (name does not incline)"
 username = "nerodono"
-
-note = "Your master is only 17 years old, but you have strong confidence in him and found shelter in his house"
+sex = "male"
