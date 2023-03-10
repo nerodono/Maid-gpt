@@ -27,7 +27,10 @@ class Danbooru:
     async def search_posts(self, tags: List[str]) -> List[DanPost]:
         async with self._session.get(
             "/posts.json",
-            params={"tags": " ".join(tags)},
+            params={
+                "random": "",
+                "tags": " ".join(tags),
+            },
         ) as response:
             json = await response.json()
             return [
