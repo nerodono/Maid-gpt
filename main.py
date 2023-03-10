@@ -72,6 +72,10 @@ async def message_handler(message: types.Message, typer: callable):
         return
 
     note = ""
+    total = result.usage.total
+    print(
+        f"Prompt ({total} tokens which costs {(total / 1000.0) * 0.002:.4f}): {message.text}"
+    )
     choice = result.choices[0]
     content = choice.message.content
 
