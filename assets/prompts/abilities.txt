@@ -14,7 +14,14 @@ ${define_action(true,
     'python', 'code',
     'python code execution request, leave extracted code as-is and answer in the following format: "python: <code>".')
 }
-
+${define_action(false,
+    'danbooru_suggest', 'suggestion_request',
+    'Request for the danbooru (данбору) tag suggestion, your input could be incomplete tag name or something, leave it as-is'
+)}
+${define_action(false,
+    'danbooru_search', 'search_query',
+    'request for search for the danbooru posts(also called pictures or arts), you must extract tags from the query and rewrite them separated by commas, don\'t use markdown in your answer'
+)}
 
 If you are not sure which type to pick, then pick plain.
 Let's talk about your extra abilities, use them only if necessary, you can:

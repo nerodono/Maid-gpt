@@ -60,9 +60,12 @@ class Ai:
     def is_master(self, user: User) -> bool:
         return self.detect_role_of(user) == HouseRole.master
 
-    def responds_to(self, message: Message) -> Optional[List[Prompt]]:
+    def responds_to(
+        self, message: Message, suggestion: bool = False
+    ) -> Optional[List[Prompt]]:
         prefix_match = self._prefix.match(message.text)
         prepended_prompts = []
+        appended_prompts = []
 
         prefix_required = True
         if message.reply_to_message:
@@ -71,18 +74,13 @@ class Ai:
 
             if replied.from_user.username == cfg.bot.username:
                 prefix_required = False
-                prepended_prompts.append(Prompt.assistant(replied.text))
+                appended_prompts.append(Prompt.assistant(replied.text))
 
-        if message.from_user.id == message.chat.id:
+        if message.chat.id == message.from_user.id:
             prefix_required = False
-            prepended_prompts.append(
-                Prompt.system(
-                    "You and your interlocutor in the private conversation right now"
-                )
-            )
 
         text = message.text
-        if not prefix_match and prefix_required:
+        if not prefix_match and prefix_required and not suggestion:
             return
         elif prefix_match:
             end = prefix_match.span()[1]
@@ -107,7 +105,12 @@ class Ai:
                 for prompt in self._engine.prompts
             ],
             core_rendered,
-            Prompt.user(text or "*Silence*"),
+            *appended_prompts,
+            *(
+                [Prompt.user(text or "*Silence*")]
+                if not suggestion
+                else []
+            ),
         ]
 
     def detect_role_of(self, user: User) -> HouseRole:

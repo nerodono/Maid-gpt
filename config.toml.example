@@ -3,6 +3,10 @@ username = "nerosmaid_bot"
 prefix = "(мейда?|медуза?|горничная)[,\\s]*"
 token = "telegram bot token"
 
+[misc.danbooru]
+login = "danbooru login"
+token = "danbooru token"
+
 [ai]
 model = "gpt-3.5-turbo"
 token = "openai token"

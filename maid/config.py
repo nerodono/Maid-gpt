@@ -13,6 +13,17 @@ class Sex(str, Enum):
 
 
 @dataclass
+class DanbooruConfig:
+    token: str
+    login: str
+
+
+@dataclass
+class MiscConfig:
+    danbooru: DanbooruConfig
+
+
+@dataclass
 class CharacterConfig:
     name: str
     sex: Sex
@@ -45,6 +56,7 @@ class AiConfig:
 class Config:
     ai: AiConfig
     bot: BotConfig
+    misc: MiscConfig
 
     @classmethod
     def read(cls, path: Path) -> Config:
