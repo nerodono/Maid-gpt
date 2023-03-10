@@ -83,7 +83,12 @@ async def message_handler(message: types.Message, typer: callable):
         note = "<Ответ был сгенерирован под влиянием контент фильтра OpenAI>\n"
     modes = ["Markdown", ""]
 
-    (before, after) = content.split(":", maxsplit=1)
+    try:
+        (before, after) = content.split(":", maxsplit=1)
+    except ValueError:
+        before = "plain"
+        after = content
+
     match before:
         case "python":
             if not ai.is_master(message.from_user):
