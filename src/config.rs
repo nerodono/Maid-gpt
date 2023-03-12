@@ -1,93 +1,195 @@
 use std::{
     fmt::Display,
-    num::NonZeroUsize,
+    fs,
+    num::{
+        NonZeroU8,
+        NonZeroUsize,
+    },
+    path::Path,
 };
 
-pub use appconf::interface::ParserFunctionality;
-use appconf::macros::decl;
-use serde::{
-    Deserialize,
-    Serialize,
-};
+use regex::Regex;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Sex {
-    Male,
-    Female,
+macro_rules! enums {
+    ($(
+        $(#[$meta:meta])*
+        $vis:vis enum $name:ident {
+            $($variants:tt)*
+        }
+    )*) => {
+        $(
+            #[derive(Debug, serde::Serialize, serde::Deserialize)]
+            #[serde(rename_all = "snake_case")]
+            $(#[$meta])*
+            $vis enum $name {
+                $($variants)*
+            }
+        )*
+    };
+
+    (
+        $(
+            $(#[$meta:meta])*
+            $vis:vis data $id:ident = $(
+                $( #[$attr_meta:meta] )*
+                $variant:ident
+            )|*
+        );*
+        $(;)?
+    ) => {
+        $(
+            #[derive(
+                Debug, Clone, Copy, PartialEq,
+                Eq, serde::Serialize, serde::Deserialize,
+            )]
+            #[serde(rename_all = "snake_case")]
+            $(#[$meta])*
+            $vis enum $id {
+                $(
+                    $(#[$attr_meta])*
+                    $variant
+                ),*
+            }
+        )*
+    };
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum LamBackend {
-    #[serde(rename = "openai")]
-    OpenAi { model: String, token: String },
+macro_rules! structs {
+    (
+        $(
+            $(#[$meta:meta])*
+            $vis:vis struct $name:ident {
+                $(
+                    $(#[$field_meta:meta])*
+                    $field:ident : $field_ty:ty
+                ),*
+                $(,)?
+            }
+        )*
+    ) => {
+        $(
+            #[derive(Debug, serde::Serialize, serde::Deserialize)]
+            $(#[$meta])*
+            $vis struct $name {
+                $(
+                    $(#[$field_meta])*
+                    pub $field : $field_ty
+                ),*
+            }
+        )*
+    };
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum MasterIdentification {
-    Username(String),
-    UserId(i64),
+enums! {
+    pub data Sex = Male | Female;
 }
 
-#[decl]
-pub struct OpenaiConfig {
-    pub model: String,
-    pub token: String,
+enums! {
+    pub enum TelegramPullMethod {
+        #[serde(rename = "longpoll")]
+        LongPolling(LongPollingSettings),
+
+        #[serde(rename = "webhook")]
+        WebHook(WebhookSettings)
+    }
+
+    pub enum LamBackend {
+        #[serde(rename = "openai")]
+        OpenAi {
+            model: String,
+            token: String,
+        }
+    }
+
+    pub enum MasterIdentity {
+        Username(String),
+        UserId(i64),
+    }
 }
 
-#[decl]
-pub struct TelegramBotConfig {
-    pub token: String,
+structs! {
+    // Helpers
+
+    pub struct CharacterItem {
+        name: String,
+        age: Option<NonZeroUsize>,
+        sex: Sex,
+    }
+
+    // Components
+
+    pub struct LongPollingSettings {
+        wait_secs: u8,
+        limit: NonZeroU8,
+    }
+
+    pub struct WebhookSettings {
+        endpoint: String,
+        secret_token: String,
+    }
+
+    pub struct TelegramConfig {
+        token: String,
+        pull: TelegramPullMethod
+    }
+
+    pub struct VkontakteConfig {
+        token: String,
+    }
+
+    pub struct MasterConfig {
+        #[serde(flatten)]
+        character: CharacterItem,
+
+        alternative_name: String,
+        identify_by: MasterIdentity,
+    }
+
+    // Root elements
+
+    pub struct Runtime {
+        threads: Option<NonZeroUsize>,
+    }
+
+    pub struct BotConfig {
+        #[serde(with = "serde_regex")]
+        prefix: Regex,
+
+        telegram: TelegramConfig,
+        vkontakte: VkontakteConfig,
+    }
+
+    pub struct AiConfig {
+        language: String,
+        lam_backend: LamBackend,
+
+        character: CharacterItem,
+        master: MasterConfig,
+
+        temperature: f64,
+    }
+
+    //
+
+    pub struct Config {
+        rt: Runtime,
+        ai: AiConfig,
+        bot: BotConfig,
+    }
 }
 
-#[decl]
-pub struct Character {
-    pub name: String,
-    pub age: Option<NonZeroUsize>,
-    pub sex: Sex,
-}
-
-#[decl]
-pub struct AiCharacterConfig {
-    #[serde(flatten)]
-    pub common: Character,
-}
-
-#[decl]
-pub struct AiMasterConfig {
-    #[serde(flatten)]
-    pub common: Character,
-    pub identity: MasterIdentification,
-}
-
-#[decl]
-pub struct AiConfig {
-    pub lam_backend: LamBackend,
-    pub temperature: f64,
-
-    pub character: AiCharacterConfig,
-    pub master: AiMasterConfig,
-}
-
-#[decl]
-pub struct BotConfig {
-    #[serde(with = "serde_regex")]
-    pub prefix: regex::Regex,
-    pub telegram: TelegramBotConfig,
-}
-
-#[decl]
-pub struct Runtime {
-    pub threads: Option<NonZeroUsize>,
-}
-
-#[decl(loader = "toml")]
-pub struct Config {
-    pub rt: Runtime,
-    pub ai: AiConfig,
-    pub bot: BotConfig,
+impl Config {
+    pub fn load(path: impl AsRef<Path>) -> Self {
+        let content = fs::read_to_string(path)
+            .expect("Failed to read config file");
+        match toml::from_str(&content) {
+            Ok(r) => r,
+            Err(e) => {
+                eprintln!("{e}");
+                panic!()
+            }
+        }
+    }
 }
 
 impl Display for Sex {
@@ -95,6 +197,9 @@ impl Display for Sex {
         &self,
         f: &mut std::fmt::Formatter<'_>,
     ) -> std::fmt::Result {
-        f.write_fmt(format_args!("{:?}", self))
+        f.write_str(match self {
+            Self::Male => "male",
+            Self::Female => "female",
+        })
     }
 }

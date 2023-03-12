@@ -7,10 +7,21 @@ prefix = "(?i)^(м[еэ][ий]да?|медуза?|горни[чш]ная?)[\\s,]
 [bot.telegram]
 token = "Telegram token"
 
+[bot.telegram.pull.longpoll]
+wait_secs = 30
+limit = 100
+
+# -- Also webhook can be used
+# [bot.telegram.pull.webhook]
+# endpoint_path = "/telegram"
+# secret_token = "Meduso"
+# --
+
 [bot.vkontakte]
 token = "VKontakte token"
 
 [ai]
+language = "Russian"
 temperature = 0.5
 
 [ai.character]
@@ -23,7 +34,8 @@ name = "Nero, or Неро in Russian (The name does not incline)"
 sex = "male"
 age = 17
 
-identity = { username = "nerodono" }
+alternative_name = "master"
+identify_by = { username = "nerodono" }
 
 [ai.lam_backend.openai]
 model = "gpt-3.5-turbo"

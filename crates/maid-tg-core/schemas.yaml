@@ -1,0 +1,55 @@
+models:
+  - name: AllowedUpdate
+    items:
+      - Message
+      - EditedChannelPost
+      - CallbackQuery
+  - name: Update
+    fields:
+      update_id: i64
+      message: Option<Message>
+
+  - name: Message
+    fields:
+      message_id: i64
+      from: User
+      date: u32
+      chat: Chat
+
+      forward_from: Option<User>
+      forward_from_chat: Option<Chat>
+
+      reply_to_message: Option<Box<Message>>
+      text: Option<String>
+
+  - name: ChatType
+    items:
+      - Private
+      - Group
+      - field: SuperGroup
+        rename: supergroup
+      - Channel
+
+  - name: Chat
+    fields:
+      id: i64
+      type: ChatType
+      title: Option<String>
+
+      active_usernames: Option<Vec<String>>
+      description: Option<String>
+
+  - name: User
+    fields:
+      id: i64
+      is_bot: bool
+
+      first_name: String
+      last_name: Option<String>
+
+      username: Option<String>
+      language_code: Option<String>
+
+      is_premium:
+        default: "false"
+        type: bool

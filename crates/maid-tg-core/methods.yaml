@@ -1,0 +1,15 @@
+pattern: mutable
+methods:
+  get_me:
+    parameters: {}
+    returns: User
+
+  get_updates:
+    parameters:
+      offset: u64
+      limit: u8
+      timeout:
+        type: u8
+        required: true
+
+    returns: Vec<Update>
