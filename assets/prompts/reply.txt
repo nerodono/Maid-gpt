@@ -1,0 +1,5 @@
+{% match data.assistant_reply %}
+    {% when Some with (text) %}
+        {{ text }}
+    {% when None %}
+{% endmatch %}

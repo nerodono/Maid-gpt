@@ -9,7 +9,10 @@ use maid_openai::{
 };
 
 pub trait ILam {
-    type Future<'a>: Future<Output = CompletionResult<Answer>> + 'a
+    type Future<'a>: Send
+        + Sync
+        + Future<Output = CompletionResult<Answer>>
+        + 'a
     where
         Self: 'a;
 

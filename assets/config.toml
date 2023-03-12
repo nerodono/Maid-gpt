@@ -1,6 +1,9 @@
 [rt]
 threads = 4
 
+[bot]
+prefix = "^(м[еэ][ий]да?|медуза?|горни[чш]ная?)[\\s,]*"
+
 [bot.telegram]
 token = "5678067454:AAFW-5gx2dzbJZbVrnpFfyVoQEKjr1UL4bw"
 
@@ -10,6 +13,18 @@ token = "vk1.a.MhDISCeKcVDMhRBF8Y1yf-3yp85XT4F5vZ6r3NJXWXW5jlzk33JODNLSyTfhI0y8n
 [ai]
 temperature = 0.5
 
+[ai.character]
+name = "Medusa"
+sex = "female"
+age = 20
+
+[ai.master]
+name = "Nero, or Неро in Russian (The name does not incline)"
+sex = "male"
+age = 17
+
+identity = { username = "nerodono" }
+
 [ai.lam_backend.openai]
 model = "gpt-3.5-turbo"
-token = "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"
+token = "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"

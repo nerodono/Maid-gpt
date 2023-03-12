@@ -3,17 +3,24 @@ use std::sync::Arc;
 use maid::{
     config::*,
     lam::ILam,
+    telegram,
 };
 use maid_openai::chat::ChatGpt;
 use tokio::runtime::Builder;
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
-async fn proceed(
+async fn proceed<L: ILam + Send + Sync + 'static>(
     config: Arc<Config>,
-    lam: impl ILam + Send + Sync,
+    lam: L,
 ) -> anyhow::Result<()> {
     let lam = Arc::new(lam);
+    let tg_bot = tokio::spawn(telegram::run_telegram_bot(
+        Arc::clone(&config),
+        Arc::clone(&lam),
+    ));
 
-    todo!()
+    tg_bot.await.unwrap_or(Ok(()))
 }
 
 async fn async_main(config: Config) -> anyhow::Result<()> {
@@ -42,6 +49,12 @@ fn main() -> anyhow::Result<()> {
     .enable_all()
     .build()
     .expect("Failed to build tokio runtime");
+
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    tracing::subscriber::set_global_default(subscriber)
+        .expect("Failed to set default subscriber");
 
     rt.block_on(async_main(config))
 }
