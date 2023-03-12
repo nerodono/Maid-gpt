@@ -2,7 +2,7 @@
 threads = 4
 
 [bot]
-prefix = "^(м[еэ][ий]да?|медуза?|горни[чш]ная?)[\\s,]*"
+prefix = "(?i)^(м[еэ][ий]да?|медуза?|горни[чш]ная?)[\\s,]*"
 
 [bot.telegram]
 token = "Telegram token"
