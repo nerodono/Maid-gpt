@@ -3,4 +3,44 @@ name = "maid"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+lto = true
+opt-level = 3
+
+[[bin]]
+name = "maid"
+path = "bin/main.rs"
+
+[lib]
+name = "maid"
+path = "src/lib.rs"
+
+[workspace]
+members = ["packages/*"]
+
+[workspace.dependencies]
+thiserror = "1.0.39"
+serde = { version = "1.0.155", features = ["derive"] }
+reqwest = { version = "0.11.14", features = ["json"] }
+serde_json = "1.0.94"
+
+[dependencies.maid-openai]
+path = "packages/maid-openai"
+
 [dependencies]
+anyhow = "1.0.69"
+appconf = { path = "packages/appconf" }
+serde = { workspace = true }
+tokio = { version = "1.26.0", features = [
+    "net",
+    "sync",
+    "rt",
+    "rt-multi-thread",
+    "io-util",
+    "macros",
+] }
+
+toml = "0.7.2"
+url = { version = "2.3.1", features = ["serde"] }
+async-trait = "0.1.66"
+askama = "0.12.0"

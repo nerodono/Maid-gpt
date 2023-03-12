@@ -1,6 +1,5 @@
-target
+./assets/config.toml
 .DS_Store
-
 
 # Added by cargo
 
