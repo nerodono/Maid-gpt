@@ -1,0 +1,30 @@
+[rt]
+threads = 4
+
+[bot]
+prefix = "^(м[еэ][ий]да?|медуза?|горни[чш]ная?)[\\s,]*"
+
+[bot.telegram]
+token = "Telegram token"
+
+[bot.vkontakte]
+token = "VKontakte token"
+
+[ai]
+temperature = 0.5
+
+[ai.character]
+name = "Medusa"
+sex = "female"
+age = 20
+
+[ai.master]
+name = "Nero, or Неро in Russian (The name does not incline)"
+sex = "male"
+age = 17
+
+identity = { username = "nerodono" }
+
+[ai.lam_backend.openai]
+model = "gpt-3.5-turbo"
+token = "OpenAI Token"
