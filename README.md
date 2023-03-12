@@ -1,8 +1,10 @@
 # Maid-LLaM
 
-![alt Maid](assets/art.jpg)
+<img align="left" src="assets/art.jpg" width="250" />
 
 Chat bot with answers powered by large language models. Currently all natural language processing and answer generation is done through the OpenAI `gpt-3.5-turbo` model.
+
+<br clear="left"/>
 
 # Abilities
 
