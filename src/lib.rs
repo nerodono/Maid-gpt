@@ -3,3 +3,4 @@
 pub mod config;
 
 pub mod lam;
+pub mod telegram;

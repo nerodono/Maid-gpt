@@ -9,8 +9,10 @@ use tokio::runtime::Builder;
 
 async fn proceed(
     config: Arc<Config>,
-    lam: impl ILam,
+    lam: impl ILam + Send + Sync,
 ) -> anyhow::Result<()> {
+    let lam = Arc::new(lam);
+
     todo!()
 }
 
