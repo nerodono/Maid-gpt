@@ -2,6 +2,7 @@ use crate::config::{
     AiCharacterConfig,
     AiMasterConfig,
     MasterIdentification,
+    Sex,
 };
 
 #[derive(Clone, Copy)]
@@ -20,8 +21,18 @@ pub struct UserInformation<'a> {
     pub id: i64,
 }
 
+impl BotInformation<'_> {
+    pub fn sex(&self) -> Sex {
+        self.self_config.common.sex
+    }
+
+    pub fn name(&self) -> &str {
+        &self.self_config.common.name
+    }
+}
+
 impl<'a> BotInformation<'a> {
-    pub fn is_master(&self, user: UserInformation<'_>) -> bool {
+    pub fn is_master(&self, user: &UserInformation<'_>) -> bool {
         match self.master_config.identity {
             MasterIdentification::UserId(id) => user.id == id,
             MasterIdentification::Username(ref username) => user
