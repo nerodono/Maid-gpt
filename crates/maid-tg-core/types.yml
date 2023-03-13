@@ -1,0 +1,95 @@
+- name: Update
+  url: https://core.telegram.org/bots/api#update
+  fields:
+    update_id: integer
+  optional:
+    message: Box<Message>
+    edited_message: Box<Message>
+
+- name: User
+  url: https://core.telegram.org/bots/api#user
+  fields:
+    id: integer
+    is_bot: bool
+    first_name: string
+
+    is_premium: bool?
+    added_to_attachment_menu: bool?
+
+  optional:
+    last_name: string
+    username: string
+    language_code: string
+
+    can_join_groups: bool
+    can_read_all_group_messages: bool
+    supports_inline_queries: bool
+
+- name: AllowedUpdate
+  int_variants:
+    - Message
+    - EditedChannelPost
+    - CallbackQuery
+
+- name: ChatType
+  int_variants:
+    - Private
+    - Group
+    - name: supergroup
+      bind: SuperGroup
+    - Channel
+
+- name: Message
+  url: https://core.telegram.org/bots/api#message
+  fields:
+    message_id: integer
+    message_thread_id: integer
+
+    date: integer
+    chat: Chat
+
+    is_topic_message: bool?
+    is_automatic_forward: bool?
+    has_protected_content: bool?
+
+  optional:
+    text: string
+    reply_to_message: Box<Message>
+    via_bot: User
+    edit_date: integer
+    media_group_id: string
+    author_signature: string
+
+    from: User
+    sender_chat: Chat
+    forward_from: User
+    forward_from_chat: Chat
+
+    forward_from_message_id: integer
+    forward_signature: string
+    forward_sender_name: string
+    forward_date: integer
+
+- name: Chat
+  url: https://core.telegram.org/bots/api#chat
+  fields:
+    id: integer
+    type!: ChatType
+
+    is_forum: bool?
+    has_private_forwards: bool?
+    has_restricted_voice_and_video_messages: bool?
+    join_to_send_messages: bool?
+    join_by_request: bool?
+
+  optional:
+    title: string
+    username: string
+    first_name: string
+    last_name: string
+
+    description: string
+    invite_link: string
+
+    active_usernames: Vec<String>
+    bio: string

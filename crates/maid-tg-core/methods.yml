@@ -1,0 +1,26 @@
+- name: getUpdates
+  url: https://core.telegram.org/bots/api#getupdates
+  description: >
+    Use this method to receive incoming updates using long polling.
+    Returns an Array of Update objects.
+
+  constructor:
+    - name: offset
+      type: i64
+
+    - name: timeout
+      type: "std::num::NonZeroU8"
+
+  builder:
+    - name: sex
+      type: i32
+    - name: limit
+      type: "std::num::NonZeroU8"
+      default: "100"
+
+    - name: allowed_updates
+      type: Vec<AllowedUpdate>
+      default: "Vec::new()"
+      list: true
+
+  returns: Vec<Update>

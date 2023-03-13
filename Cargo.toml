@@ -25,6 +25,8 @@ thiserror = "1.0.39"
 serde_json = "1.0.94"
 
 [dependencies]
+maid-tg-core = { path = "crates/maid-tg-core" }
+
 askama = "0.12.0"
 owo-colors = "3.5.0"
 regex = "1.7.1"
