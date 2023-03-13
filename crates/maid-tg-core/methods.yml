@@ -12,7 +12,7 @@
       type: "std::num::NonZeroU8"
 
   builder:
-    - name: sex
+    - name: test
       type: i32
     - name: limit
       type: "std::num::NonZeroU8"
