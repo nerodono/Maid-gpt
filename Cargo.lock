@@ -455,7 +455,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "askama",
- "maid-tg-core",
+ "maid-tg",
  "owo-colors",
  "regex",
  "serde",
@@ -473,6 +473,12 @@ version = "0.1.0"
 [[package]]
 name = "maid-tg"
 version = "0.1.0"
+dependencies = [
+ "maid-tg-core",
+ "maid-tg-core-codegen",
+ "reqwest",
+ "serde",
+]
 
 [[package]]
 name = "maid-tg-core"

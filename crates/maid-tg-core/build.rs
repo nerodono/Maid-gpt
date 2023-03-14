@@ -13,19 +13,13 @@ use maid_tg_core_codegen::{
         schemas::*,
     },
     parse_yaml,
+    read,
     types::{
         emitter::*,
         schemas::*,
     },
+    write,
 };
-
-fn write(to: impl AsRef<Path>, data: impl AsRef<[u8]>) {
-    fs::write(to, data).unwrap();
-}
-
-fn read(p: impl AsRef<Path>) -> String {
-    fs::read_to_string(p).unwrap()
-}
 
 fn main() {
     let out_dir = PathBuf::from(env::var_os("OUT_DIR").unwrap());
@@ -33,13 +27,13 @@ fn main() {
     let models: Vec<Model> = parse_yaml(read("types.yml"));
     let methods: Vec<Method> = parse_yaml(read("methods.yml"));
 
-    let (structures, fns) = emit_methods(&methods);
+    let (structures, _) = emit_methods(&methods);
 
     write(out_dir.join("schemas_generated.rs"), emit_models(&models));
-    write("local.rs", format!("{structures}\n\n{fns}"));
+    write(out_dir.join("builders_generated.rs"), structures);
 
-    println!("cargo:rerun-if-changed=methods.ron");
-    println!("cargo:rerun-if-changed=types.ron");
+    println!("cargo:rerun-if-changed=methods.yml");
+    println!("cargo:rerun-if-changed=types.yml");
 
     println!("cargo:rerun-if-changed=build.rs");
 }

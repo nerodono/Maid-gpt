@@ -1,3 +1,13 @@
+- name: getMe
+  url: https://core.telegram.org/bots/api#getme
+  description: >
+    A simple method for testing your bot's authentication token.
+    Requires no parameters.
+    Returns basic information about the bot in form of a User object.
+
+  constructor: []
+  returns: User
+
 - name: getUpdates
   url: https://core.telegram.org/bots/api#getupdates
   description: >
@@ -16,11 +26,14 @@
       type: i32
     - name: limit
       type: "std::num::NonZeroU8"
-      default: "100"
+      default: "std::num::NonZeroU8::new(100).unwrap()"
 
     - name: allowed_updates
-      type: Vec<AllowedUpdate>
-      default: "Vec::new()"
+      type: AllowedUpdate
+      default: "vec![AllowedUpdate::Message]"
+      serialize:
+        as: String
+        fn: updates_to_string
       list: true
 
   returns: Vec<Update>

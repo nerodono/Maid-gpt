@@ -6,3 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+maid-tg-core = { path = "../maid-tg-core" }
+reqwest = { workspace = true }
+serde = { workspace = true }
+
+[build-dependencies]
+maid-tg-core-codegen = { path = "../maid-tg-core-codegen" }
