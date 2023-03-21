@@ -9,20 +9,43 @@ path = "src/lib.rs"
 
 [[bin]]
 name = "maid-bot"
-path = "bin/main.rs"
+path = "bin/bot.rs"
 
 [workspace]
 members = ["crates/*"]
 
 [workspace.dependencies]
-tokio = "1.26.0"
-reqwest = "0.11.14"
+tokio = { version = "1.26.0", features = [
+    "rt",
+    "rt-multi-thread",
+    "sync",
+    "time",
+] }
+reqwest = { version = "0.11.14", features = ["json"] }
 async-trait = "0.1.66"
 derive_more = { version = "0.99.17", features = [
     "display",
 ], default-features = false }
 thiserror = "1.0.39"
 serde_json = "1.0.94"
+serde = { version = "1.0.156", features = ["derive"] }
 
 [dependencies]
+regex = "1.7.1"
+toml = "0.7.3"
+
+llam-engine.path = "crates/llam-engine"
+
+derive_more.workspace = true
 tokio.workspace = true
+serde.workspace = true
+serde_regex = "1.1.0"
+anyhow = "1.0.70"
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
+owo-colors = "3.5.0"
+teloxide = { version = "0.12.2", default-features = false, features = [
+    "native-tls",
+] }
+dptree = "0.3.0"
+askama = "0.12.0"

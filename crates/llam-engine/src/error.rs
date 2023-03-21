@@ -10,5 +10,5 @@ pub enum CompletionError {
     Json(#[from] serde_json::Error),
 
     #[error("Completion error: {0}")]
-    Plaintext(#[from] String),
+    Plaintext(String),
 }

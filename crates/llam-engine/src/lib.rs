@@ -3,3 +3,4 @@ pub mod interface;
 pub mod types;
 
 pub mod backends;
+pub mod chat;
